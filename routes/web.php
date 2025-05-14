@@ -65,7 +65,9 @@ Route::middleware('domain-check')->group(function () {
     Route::get('pricing', [HomeController::class, 'Pricing'])->name('apps.pricing');
     Route::get('pricing/plans', [HomeController::class, 'PricingPlans'])->name('apps.pricing.plan');
     Route::get('pages', [HomeController::class, 'CustomPage'])->name('custompage');
-    Route::get('/', [HomeController::class, 'index'])->name('start');
+    Route::get('/', [HomeController::class, function () {
+        return redirect()->route('login');
+    }])->name('start');
 });
 Route::middleware(['auth', 'verified'])->group(function () {
 
