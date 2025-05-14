@@ -6,7 +6,7 @@
   } */
 
 :root {
-    --theme1-color: #0CAF60;
+    --theme1-color: #3A59D1;
     --theme2-color: #75C251;
     --theme3-color: #584ED2;
     --theme4-color: #145388;
@@ -1567,7 +1567,7 @@ a.b-brand {
 
 /* border-color */
 body.theme-1 .border-primary {
-    border-color: #0CAF60 !important;
+    border-color: #3A59D1 !important;
 }
 
 body.theme-2 .border-primary {
@@ -1738,9 +1738,9 @@ body.theme-10 .border-primary {
 
 .manager-card .product-content .btn:hover,
 .manager-card .product-content .btn:focus {
-    background: linear-gradient(141.55deg, #0CAF60 3.46%, #0CAF60 99.86%), #0CAF60;
+    background: linear-gradient(141.55deg, #3A59D1 3.46%, #3A59D1 99.86%), #3A59D1;
     color: #ffffff;
-    border-color: #0CAF60;
+    border-color: #3A59D1;
 }
 
 .add_on_manager .card-header {

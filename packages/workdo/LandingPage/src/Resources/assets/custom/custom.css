@@ -227,8 +227,8 @@
 }
 
 .compare-plan-opction li.plan-btn a.btn {
-    background-color: #0CAF60;
-    border-color: #0CAF60;
+    background-color: #3A59D1;
+    border-color: #3A59D1;
     border-radius: 11px;
     color: #fff !important;
     max-width: 200px;
@@ -262,7 +262,7 @@
 }
 .tab-head-row ul.tabs li a {
     padding: 10px;
-    color: #0CAF60;
+    color: #3A59D1;
     border-radius: 10px;
     font-size: 14px;
     line-height: 1;
@@ -270,7 +270,7 @@
 }
 .tab-head-row ul.tabs li a.active {
     color: #ffffff;
-    background: linear-gradient(141.55deg, #0CAF60 3.46%, #0CAF60 99.86%), #0CAF60;
+    background: linear-gradient(141.55deg, #3A59D1 3.46%, #3A59D1 99.86%), #3A59D1;
 }
 
 @media screen and (max-width: 767px) {

@@ -14,48 +14,48 @@
         .m-list-active,
         .m-list-active:hover,
         .m-list-active:focus {
-            background: linear-gradient(141.55deg, #0CAF60 3.46%, #0CAF60 99.86%), #0CAF60 !important;
+            background: linear-gradient(141.55deg, #3A59D1 3.46%, #3A59D1 99.86%), #3A59D1 !important;
         }
 
         .mc-sender p {
-            background: linear-gradient(141.55deg, #0CAF60 3.46%, #0CAF60 99.86%), #0CAF60 !important;
+            background: linear-gradient(141.55deg, #3A59D1 3.46%, #3A59D1 99.86%), #3A59D1 !important;
         }
 
         .messenger-favorites div.avatar {
-            box-shadow: 0px 0px 0px 2px #0CAF60 !important;
+            box-shadow: 0px 0px 0px 2px #3A59D1 !important;
         }
 
         .messenger-listView-tabs a,
         .messenger-listView-tabs a:hover,
         .messenger-listView-tabs a:focus {
-            color: linear-gradient(141.55deg, #0CAF60 3.46%, #0CAF60 99.86%), #0CAF60 !important;
+            color: linear-gradient(141.55deg, #3A59D1 3.46%, #3A59D1 99.86%), #3A59D1 !important;
         }
 
         .m-header svg {
-            color: #0CAF60 !important;
+            color: #3A59D1 !important;
         }
 
         .active-tab {
-            border-bottom: 2px solid #0CAF60 !important;
+            border-bottom: 2px solid #3A59D1 !important;
         }
 
         .messenger-infoView nav a {
 
-            color: linear-gradient(141.55deg, #0CAF60 3.46%, #0CAF60 99.86%), #0CAF60 !important;
+            color: linear-gradient(141.55deg, #3A59D1 3.46%, #3A59D1 99.86%), #3A59D1 !important;
         }
 
         .lastMessageIndicator {
-            color: #0CAF60 !important;
+            color: #3A59D1 !important;
         }
 
         .messenger-list-item td span .lastMessageIndicator {
 
-            color: #0CAF60 !important;
+            color: #3A59D1 !important;
             font-weight: bold;
         }
 
         .messenger-sendCard button svg {
-            color: #0CAF60 !important;
+            color: #3A59D1 !important;
         }
 
         .messenger-list-item.m-list-active td span .lastMessageIndicator {

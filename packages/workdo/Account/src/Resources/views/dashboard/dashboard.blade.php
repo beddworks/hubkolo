@@ -9,7 +9,7 @@
     <style>
     .nav-pills .nav-item a:hover,
     .nav-pills .nav-item a:focus {
-        color: #0CAF60;
+        color: #3A59D1;
     }
 
     .nav-pills .nav-item a.active {

@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/plugins/dropzone.css') }}">
     <style>
         .border-primary {
-            border-color: #0CAF60 !important;
+            border-color: #3A59D1 !important;
         }
     </style>
 @endpush
