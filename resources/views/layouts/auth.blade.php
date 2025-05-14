@@ -114,7 +114,7 @@
                         <div class="collapse navbar-collapse" id="navbarlogin">
                             <ul class="navbar-nav align-items-center ms-auto mb-lg-0">
 
-                                @stack('custom_page_links')
+                                {{-- @stack('custom_page_links') --}}
                                 @yield('language-bar')
                             </ul>
                         </div>
