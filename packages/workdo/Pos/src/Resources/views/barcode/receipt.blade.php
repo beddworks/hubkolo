@@ -25,7 +25,7 @@
     <!-- vendor css -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" id="main-style-link">
 
-    <title>{{__('POS Barcode')}} | {{ !empty($company_settings['title_text']) ? $company_settings['title_text'] : (!empty($admin_settings['title_text']) ? $admin_settings['title_text'] :'WorkDo') }}</title>
+    <title>{{__('POS Barcode')}} | {{ !empty($company_settings['title_text']) ? $company_settings['title_text'] : (!empty($admin_settings['title_text']) ? $admin_settings['title_text'] :'HUBKOLO') }}</title>
     @if (isset($company_settings['site_rtl'] ) && $company_settings['site_rtl'] == 'on')
         <link rel="stylesheet" href="{{ asset('assets/css/style-rtl.css')}}" id="main-style-link">
     @endif
@@ -37,7 +37,7 @@
             @for($i=1;$i<=$quantity;$i++)
                 <div class="col-auto mb-2">
                     <small class="">{{$product->name}}</small>
-                    <div data-id="{{$product->id}}" class="product_barcode product_barcode_hight_de product_barcode_{{$product->id}} mt-2" data-skucode="{{ $product->sku }}"></div>
+                    <div data-id="{{$product->id}}" class="product_barcode product_barcode_hight_de product_barcode_{{$product->id}} mt-2" data-warehouse="{{ $product->warehouse_id }}" data-skucode="{{ $product->sku }}"></div>
                 </div>
             @endfor
         @endforeach
@@ -60,12 +60,13 @@
         $(".product_barcode").each(function() {
             var id = $(this).data("id");
             var sku = $(this).data('skucode');
-            sku = encodeURIComponent(sku);
+            var warehouse = $(this).data('warehouse');
+            sku = encodeURIComponent(id + '_' + warehouse);
             generateBarcode(sku, id);
         });
     });
     function generateBarcode(val, id) {
-        var value = val;
+        var value = val;    
         var btype = '{{ $barcode['barcodeType'] }}';
         var renderer = '{{ $barcode['barcodeFormat'] }}';
         var settings = {

@@ -98,16 +98,16 @@
         <?php $lastsegment = request()->segment(count(request()->segments())); ?>
         <div class="row">
             <div class="col-12">
-                <div class="mt-2 pos-top-bar bg-color d-flex align-items-center justify-content-between bg-primary gap-2">
+                <div class="mt-2 pos-top-bar bg-color d-flex align-items-center justify-content-between bg-white border border-primary gap-2">
                    <div class="d-flex flex-wrap align-items-center gap-2">
                         <div class="logo">
                             <a href="{{ route('dashboard')}}" class="b-brand">
                                 <img src="{{ get_file(sidebar_logo()) }}{{ '?' . time() }}"
-                                    alt="" style="max-width: 100px" />
+                                    alt="" style="max-height: 40px" />
                             </a>
                         </div>
                    </div>
-                    <a href="{{ route('dashboard') }}" class="text-white"><i class="ti ti-home"
+                    <a href="{{ route('dashboard') }}" class=""><i class="ti ti-home"
                             style="font-size: 20px;"></i> </a>
                 </div>
             </div>
@@ -119,12 +119,26 @@
                     <div class="card-body p-2">
                         <div class="right-content">
                             <div class="search-bar-left mb-3">
-                                <form>
+                                <form class="d-flex align-items-center gap-2">
                                     <div class="input-group bg-white rounded">
                                         <input id="searchproduct" type="text" data-url="{{ route('search.products') }}"
                                             placeholder="{{ __('Search Product') }}"
                                             class="form-control pr-4 shadow-none">
                                         <span class="input-group-text"><i class="ti ti-search"></i></span>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <a class="btn btn-primary btn-icon"
+                                             data-bs-toggle="tooltip" 
+                                             data-bs-placement="top" 
+                                             title="" 
+                                             data-ajax-popup="true" 
+                                             data-size="md" 
+                                             data-title="Scan Product" 
+                                             data-url="{{ route('scan.product') }}" 
+                                             data-bs-original-title="Scan Product" 
+                                             aria-label="Scan Product">
+                                            <i class="ti ti-barcode text-white"></i>
+                                        </a>
                                     </div>
                                 </form>
                             </div>

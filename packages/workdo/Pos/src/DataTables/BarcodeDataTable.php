@@ -26,7 +26,7 @@ class BarcodeDataTable extends DataTable
         $dataTable =   (new EloquentDataTable($query))
             ->addIndexColumn()
             ->editColumn('image', function (ProductService $model) {
-                $html = '<div id="' . $model->id . '" class="product_barcode product_barcode_hight_de" data-skucode="' . $model->sku . '"></div>';
+                $html = '<div id="' . $model->id . '" class="product_barcode product_barcode_hight_de" data-skucode="' . $model->sku . '" data-warehouse="' . $model->warehouse_id . '"></div>';
                 return $html;
             });
 
@@ -135,8 +135,9 @@ class BarcodeDataTable extends DataTable
                   $(".product_barcode").each(function() {
                     var id = $(this).attr("id");
                     var sku = $(this).data("skucode");
-                    sku = encodeURIComponent(sku);
-                    generateBarcode(sku, id);
+                    var warehouse = $(this).data("warehouse");
+                    sku = encodeURIComponent(id + "_" + warehouse);
+                    generateBarcode(sku, id, warehouse);
                 });
             }'
         ]);

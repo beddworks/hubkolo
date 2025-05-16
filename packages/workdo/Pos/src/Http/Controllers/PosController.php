@@ -44,7 +44,7 @@ class PosController extends Controller
     {
         if (\Auth::user()->isAbleTo('pos add manage'))
         {
-            session()->forget('pos');
+            // session()->forget('pos');
             $customers=[];
             $customers      = User::where('type','client')->where('created_by', creatorId())->where('workspace_id',getActiveWorkSpace())->get()->pluck('name', 'name');
             $customers->prepend('Walk-in-customer', 'Walk-in-customer');
@@ -507,6 +507,19 @@ class PosController extends Controller
                     </div>';
                 return Response($output);
             }
+        }
+    }
+
+    public function scanProduct()
+    {
+        if (\Auth::user()->isAbleTo('pos add manage'))
+        {
+            $users = \Auth::user();
+            return view('pos::pos.scanproduct',compact('users'));
+        }
+        else
+        {
+            return redirect()->back()->with('error', __('Permission Denied.'));
         }
     }
 
