@@ -23,7 +23,7 @@
     <section class="product-listing-section product-custom-page padding-bottom">
         <div class="container">
             <div class="listing-info padding-top ">
-                {!! 'Service Agreement: Users agree to abide by the terms outlined in the Service Agreement, which governs the use of WorkDo Dash and its features. Data Protection: WorkDo Dash prioritizes user privacy and data protection, adhering to strict policies and regulations to safeguard sensitive information. Payment Terms: Users are responsible for adhering to the payment terms specified in the agreement, ensuring timely payments for services rendered. Intellectual Property Rights: WorkDo Dash respects intellectual property rights and expects users to do the same, refraining from infringing upon copyrights or trademarks associated with the platform.' !!} </div>
+                {!! 'Service Agreement: Users agree to abide by the terms outlined in the Service Agreement, which governs the use of HUBKOLO and its features. Data Protection: HUBKOLO prioritizes user privacy and data protection, adhering to strict policies and regulations to safeguard sensitive information. Payment Terms: Users are responsible for adhering to the payment terms specified in the agreement, ensuring timely payments for services rendered. Intellectual Property Rights: HUBKOLO respects intellectual property rights and expects users to do the same, refraining from infringing upon copyrights or trademarks associated with the platform.' !!} </div>
         </div>
     </section>
 </div>

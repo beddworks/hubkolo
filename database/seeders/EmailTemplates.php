@@ -1139,7 +1139,7 @@ class EmailTemplates extends Seeder
                 $emailtemplate=  EmailTemplate::create(
                     [
                         'name' => $eTemp,
-                        'from' => 'WorkDo Dash',
+                        'from' => 'HUBKOLO',
                         'module_name' => 'general',
                         'created_by' => 1,
                         'workspace_id' => 0

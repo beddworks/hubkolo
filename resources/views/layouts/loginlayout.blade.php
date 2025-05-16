@@ -37,9 +37,9 @@
     </title>
 
     <meta name="title"
-        content="{{ !empty($admin_settings['meta_title']) ? $admin_settings['meta_title'] : 'WOrkdo Dash' }}">
+        content="{{ !empty($admin_settings['meta_title']) ? $admin_settings['meta_title'] : 'HUBKOLO' }}">
     <meta name="keywords"
-        content="{{ !empty($admin_settings['meta_keywords']) ? $admin_settings['meta_keywords'] : 'WorkDo Dash,SaaS solution,Multi-workspace' }}">
+        content="{{ !empty($admin_settings['meta_keywords']) ? $admin_settings['meta_keywords'] : 'HUBKOLO,SaaS solution,Multi-workspace' }}">
     <meta name="description"
         content="{{ !empty($admin_settings['meta_description']) ? $admin_settings['meta_description'] : 'Discover the efficiency of Dash, a user-friendly web application by WorkDo.' }}">
 
@@ -47,7 +47,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ env('APP_URL') }}">
     <meta property="og:title"
-        content="{{ !empty($admin_settings['meta_title']) ? $admin_settings['meta_title'] : 'WOrkdo Dash' }}">
+        content="{{ !empty($admin_settings['meta_title']) ? $admin_settings['meta_title'] : 'HUBKOLO' }}">
     <meta property="og:description"
         content="{{ !empty($admin_settings['meta_description']) ? $admin_settings['meta_description'] : 'Discover the efficiency of Dash, a user-friendly web application by WorkDo.' }} ">
     <meta property="og:image"
@@ -57,7 +57,7 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ env('APP_URL') }}">
     <meta property="twitter:title"
-        content="{{ !empty($admin_settings['meta_title']) ? $admin_settings['meta_title'] : 'WOrkdo Dash' }}">
+        content="{{ !empty($admin_settings['meta_title']) ? $admin_settings['meta_title'] : 'HUBKOLO' }}">
     <meta property="twitter:description"
         content="{{ !empty($admin_settings['meta_description']) ? $admin_settings['meta_description'] : 'Discover the efficiency of Dash, a user-friendly web application by WorkDo.' }} ">
     <meta property="twitter:image"

@@ -281,10 +281,10 @@ class LandingPageSetting extends Model
             $terms['template_name']     = 'page_content';
             $terms['page_slug']         = 'terms_and_conditions';
             $terms['menubar_page_short_description'] = 'Our Terms and Conditions page outlines user agreement, data protection policies, payment terms, and intellectual property rights.';
-            $terms['menubar_page_contant'] = 'Service Agreement: Users agree to abide by the terms outlined in the Service Agreement, which governs the use of WorkDo Dash and its features.
-            Data Protection: WorkDo Dash prioritizes user privacy and data protection, adhering to strict policies and regulations to safeguard sensitive information.
+            $terms['menubar_page_contant'] = 'Service Agreement: Users agree to abide by the terms outlined in the Service Agreement, which governs the use of HUBKOLO and its features.
+            Data Protection: HUBKOLO prioritizes user privacy and data protection, adhering to strict policies and regulations to safeguard sensitive information.
             Payment Terms: Users are responsible for adhering to the payment terms specified in the agreement, ensuring timely payments for services rendered.
-            Intellectual Property Rights: WorkDo Dash respects intellectual property rights and expects users to do the same, refraining from infringing upon copyrights or trademarks associated with the platform.';
+            Intellectual Property Rights: HUBKOLO respects intellectual property rights and expects users to do the same, refraining from infringing upon copyrights or trademarks associated with the platform.';
 
             $terms['header']    = 'on';
             $terms['footer']    = 'on';
@@ -297,8 +297,8 @@ class LandingPageSetting extends Model
             $policy['menubar_page_name']    = 'Privacy Policy';
             $policy['page_slug']            = 'privacy_policy';
             $policy['template_name']         = 'page_content';
-            $policy['menubar_page_short_description'] = 'Protecting your privacy is our priority at WorkDo Dash, ensuring your data is used transparently and securely.';
-            $policy['menubar_page_contant'] = 'At WorkDo Dash, we prioritize your privacy and are committed to safeguarding your personal information. Our privacy policy outlines the types of data we collect, how we use it, and the measures we take to protect it. We collect information to enhance user experience, provide personalized services, and ensure the security of our platform. We do not share your personal data with third parties without your consent, except as required by law or to protect our rights. By using WorkDo Dash, you agree to the collection and use of information in accordance with this policy, ensuring transparency and trust in all our interactions.';
+            $policy['menubar_page_short_description'] = 'Protecting your privacy is our priority at HUBKOLO, ensuring your data is used transparently and securely.';
+            $policy['menubar_page_contant'] = 'At HUBKOLO, we prioritize your privacy and are committed to safeguarding your personal information. Our privacy policy outlines the types of data we collect, how we use it, and the measures we take to protect it. We collect information to enhance user experience, provide personalized services, and ensure the security of our platform. We do not share your personal data with third parties without your consent, except as required by law or to protect our rights. By using HUBKOLO, you agree to the collection and use of information in accordance with this policy, ensuring transparency and trust in all our interactions.';
 
             $policy['header']    = 'on';
             $policy['footer']    = 'on';

@@ -18,21 +18,21 @@
         {{ __('POS') }} |
         {{ isset($company_settings['header_text']) && !empty($company_settings['header_text']) ? $company_settings['header_text']->value : config('app.name', 'WorkDo Crm') }}
     </title>
-    <meta name="title" content="{{ isset($admin_settings['meta_title']) && !empty($admin_settings['meta_title']) ? $admin_settings['meta_title'] : 'WOrkdo Dash' }}">
-    <meta name="keywords" content="{{ isset($admin_settings['meta_keywords']) && !empty($admin_settings['meta_keywords']) ? $admin_settings['meta_keywords'] : 'WorkDo Dash,SaaS solution,Multi-workspace' }}">
+    <meta name="title" content="{{ isset($admin_settings['meta_title']) && !empty($admin_settings['meta_title']) ? $admin_settings['meta_title'] : 'HUBKOLO' }}">
+    <meta name="keywords" content="{{ isset($admin_settings['meta_keywords']) && !empty($admin_settings['meta_keywords']) ? $admin_settings['meta_keywords'] : 'HUBKOLO,SaaS solution,Multi-workspace' }}">
     <meta name="description" content="{{ isset($admin_settings['meta_description']) && !empty($admin_settings['meta_description']) ? $admin_settings['meta_description'] : 'Discover the efficiency of Dash, a user-friendly web application by WorkDo.'}}">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ env('APP_URL') }}">
-    <meta property="og:title" content="{{ isset($admin_settings['meta_title']) && !empty($admin_settings['meta_title']) ? $admin_settings['meta_title'] : 'WOrkdo Dash' }}">
+    <meta property="og:title" content="{{ isset($admin_settings['meta_title']) && !empty($admin_settings['meta_title']) ? $admin_settings['meta_title'] : 'HUBKOLO' }}">
     <meta property="og:description" content="{{ isset($admin_settings['meta_description']) && !empty($admin_settings['meta_description']) ? $admin_settings['meta_description'] : 'Discover the efficiency of Dash, a user-friendly web application by WorkDo.'}} ">
     <meta property="og:image" content="{{ get_file( (isset($admin_settings['meta_image']) && !empty($admin_settings['meta_image'])) ? (check_file($admin_settings['meta_image'])) ?  $admin_settings['meta_image'] : 'uploads/meta/meta_image.png' : 'uploads/meta/meta_image.png'  ) }}{{'?'.time() }}">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{{ env('APP_URL') }}">
-    <meta property="twitter:title" content="{{ isset($admin_settings['meta_title']) && !empty($admin_settings['meta_title']) ? $admin_settings['meta_title'] : 'WOrkdo Dash' }}">
+    <meta property="twitter:title" content="{{ isset($admin_settings['meta_title']) && !empty($admin_settings['meta_title']) ? $admin_settings['meta_title'] : 'HUBKOLO' }}">
     <meta property="twitter:description" content="{{ isset($admin_settings['meta_description']) && !empty($admin_settings['meta_description']) ? $admin_settings['meta_description'] : 'Discover the efficiency of Dash, a user-friendly web application by WorkDo.'}} ">
     <meta property="twitter:image" content="{{ get_file( (isset($admin_settings['meta_image']) && !empty($admin_settings['meta_image'])) ? (check_file($admin_settings['meta_image'])) ?  $admin_settings['meta_image'] : 'uploads/meta/meta_image.png' : 'uploads/meta/meta_image.png'  ) }}{{'?'.time() }}">
 

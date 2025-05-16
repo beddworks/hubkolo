@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'system' => 'WorkDo Dash SaaS',
+    'system' => 'HUBKOLO SaaS',
     'system_version' => '6.2',
 ];
