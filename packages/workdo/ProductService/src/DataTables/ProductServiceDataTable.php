@@ -181,13 +181,16 @@ class ProductServiceDataTable extends DataTable
                     'text' => '<i class="fas fa-file-csv me-2"></i> ' . __('CSV'),
                     'className' => 'btn btn-light text-primary dropdown-item',
                     'exportOptions' => ['columns' => [0, 1, 3]],
+                    'action' => 'function(e, dt, node, config) {
+                        window.location.href = "'.route('product-service.export').'";
+                    }',
                 ],
-                [
-                    'extend' => 'excel',
-                    'text' => '<i class="fas fa-file-excel me-2"></i> ' . __('Excel'),
-                    'className' => 'btn btn-light text-primary dropdown-item',
-                    'exportOptions' => ['columns' => [0, 1, 3]],
-                ],
+                // [
+                //     'extend' => 'excel',
+                //     'text' => '<i class="fas fa-file-excel me-2"></i> ' . __('Excel'),
+                //     'className' => 'btn btn-light text-primary dropdown-item',
+                //     'exportOptions' => ['columns' => [0, 1, 3]],
+                // ],
             ],
         ];
 
@@ -251,8 +254,8 @@ class ProductServiceDataTable extends DataTable
     {
         return [
             Column::make('id')->searchable(false)->visible(false)->exportable(false)->printable(false),
-            Column::make('No')->title(__('No'))->data('DT_RowIndex')->name('DT_RowIndex')->searchable(false)->orderable(false),
-            Column::make('image')->title(__('Image'))->orderable(false)->searchable(false),
+            Column::make('No')->title(__('No'))->data('DT_RowIndex')->name('DT_RowIndex')->searchable(false)->orderable(false)->exportable(false),
+            Column::make('image')->title(__('Image'))->orderable(false)->searchable(false)->exportable(false),
             Column::make('name')->title(__('Name')),
             Column::make('sku')->title(__('Sku')),
             Column::make('sale_price')->title(__('Sale Price')),
@@ -266,7 +269,6 @@ class ProductServiceDataTable extends DataTable
                 ->exportable(false)
                 ->printable(false)
                 ->width(60)
-
         ];
     }
 

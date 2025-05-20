@@ -61,7 +61,7 @@
             var id = $(this).data("id");
             var sku = $(this).data('skucode');
             var warehouse = $(this).data('warehouse');
-            sku = encodeURIComponent(id + '_' + warehouse);
+            sku = encodeURIComponent(sku);
             generateBarcode(sku, id);
         });
     });

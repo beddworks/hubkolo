@@ -28,7 +28,7 @@ Route::group(['middleware' => ['web', 'auth', 'verified','PlanModuleCheck:Pos']]
         Route::post('warehouse-empty-cart', [PosController::class, 'warehouseemptyCart'])->name('warehouse-empty-cart');
         Route::get('product-categories', [PosController::class, 'getProductCategories'])->name('product.categories');
         Route::post('empty-cart', [PosController::class, 'emptyCart']);
-        Route::get('add-to-cart/{id}/{session}/{war_id}', [PosController::class, 'addToCart'])->name('addTocart');
+        Route::get('add-to-cart/{id}/{session}/{war_id}/{sku?}', [PosController::class, 'addToCart'])->name('addTocart');
         Route::get('scan-product', [PosController::class, 'scanProduct'])->name('scan.product');
         Route::delete('remove-from-cart', [PosController::class, 'removeFromCart']);
         Route::patch('update-cart', [PosController::class, 'updateCart']);

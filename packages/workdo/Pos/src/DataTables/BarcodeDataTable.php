@@ -135,9 +135,8 @@ class BarcodeDataTable extends DataTable
                   $(".product_barcode").each(function() {
                     var id = $(this).attr("id");
                     var sku = $(this).data("skucode");
-                    var warehouse = $(this).data("warehouse");
-                    sku = encodeURIComponent(id + "_" + warehouse);
-                    generateBarcode(sku, id, warehouse);
+                    sku = encodeURIComponent(sku);
+                    generateBarcode(sku, id);
                 });
             }'
         ]);

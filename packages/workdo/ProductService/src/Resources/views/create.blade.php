@@ -88,6 +88,42 @@
         function generateSKU(){
             var sku = 'SKU-' + Math.random().toString(24).substr(2, 7);
             $('input[name=sku]').val(sku.toUpperCase());
+            checkSku();
         }
+
+        function checkSku(){
+            var sku = $('input[name=sku]').val();
+            $.ajax({
+                url: "{{ route('check.sku') }}",
+                type: 'POST',
+                data: {
+                    sku: sku,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    if(response.status === 'error') {
+                        $('input[name=sku]').addClass('border-danger');
+                        if (!$('.input-group').next('small.text-danger').length) {
+                            $('.input-group').after('<small class="text-danger">' + response.message + '</small>');
+                        }
+                    }else{
+                        $('input[name=sku]').removeClass('border-danger');
+                        $('.input-group').next('small.text-danger').remove();
+                    }
+                }
+            });
+        }
+
+        $(document).on('change keyup', 'input[name=sku]', function() {
+            console.log('change');
+            checkSku();
+        });
+        
+        $(document).on('paste', 'input[name=sku]', function() {
+            console.log('paste');
+            setTimeout(function() {
+                checkSku();
+            }, 100);
+        });
     </script>
 @endpush

@@ -523,27 +523,39 @@ class PosController extends Controller
         }
     }
 
-    public function addToCart(Request $request, $id,$session_key,$war)
+    public function addToCart(Request $request, $id,$session_key,$war, $sku = null)
     {
         if (Auth::user()->isAbleTo('pos cart manage') && $request->ajax()) {
-            $product = \Workdo\ProductService\Entities\ProductService::find($id);
+
+            if($sku){
+                $product = \Workdo\ProductService\Entities\ProductService::where('sku', $sku)->first();
+            }else{
+                $product = \Workdo\ProductService\Entities\ProductService::find($id);
+            }
+
 
             $productquantity = 0;
 
             if ($product) {
 
+
                 // $productquantity = $product->getTotalProductQuantity();
-                $productquantity=$product->warehouseProduct($product->id,$war!=0?$war:1);
+
+                // $war = $war != 0 ? $war : 1;
+
+                $war = $product->warehouse_id;
+
+                $productquantity=$product->warehouseProduct($product->id, $war);
             }
 
             if (!$product || ($session_key == 'pos' && $productquantity == 0)) {
                 return response()->json(
                     [
-                        'code' => 404,
-                        'status' => 'Error',
-                        'error' => __('This product is out of stock!'),
+                        'code' => 400,
+                        'status' => 'error',
+                        'message' => __('This product is out of stock!'),
                     ],
-                    404
+                    400
                 );
             }
 
@@ -665,11 +677,11 @@ class PosController extends Controller
                 if ($originalquantity < $cart[$id]['quantity'] && $session_key == 'pos') {
                     return response()->json(
                         [
-                            'code' => 404,
-                            'status' => 'Error',
-                            'error' => __('This product is out of stock!'),
+                            'code' => 400,
+                            'status' => 'error',
+                            'message' => __('This product is out of stock!'),
                         ],
-                        404
+                        400
                     );
                 }
 

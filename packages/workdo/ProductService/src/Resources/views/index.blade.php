@@ -74,6 +74,11 @@
                                     <span class="btn-inner--icon"><i
                                             class="ti ti-trash-off text-white-off "></i></span>
                                 </a>
+                                {{-- <a href="{{ route('product-service.export') }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip"
+                                    title="{{ __('Export') }}" id="export"
+                                    data-original-title="{{ __('Export') }}">
+                                    <span class="btn-inner--icon"><i class="ti ti-file-export"></i></span>
+                                </a> --}}
                             </div>
                         </div>
                     </div>

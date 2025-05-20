@@ -39,9 +39,13 @@ Route::group(['middleware' => ['web', 'auth', 'verified','PlanModuleCheck:Produc
     Route::post('get-taxes', [ProductServiceController::class, 'getTaxes'])->name('get.taxes');
     Route::any('product-service/get-item', [ProductServiceController::class, 'GetItem'])->name('get.item');
 
+    Route::post('check-sku', [ProductServiceController::class, 'checkSku'])->name('check.sku');
+
 
     Route::post('category/getaccount', [CategoryController::class, 'getAccount'])->name('category.getaccount');
 
     Route::post('product-service/section/type', [ProductServiceController::class, 'ProductSectionGet'])->name('product.section.type');
+
+    Route::get('product-service-export', [ProductServiceController::class, 'export'])->name('product-service.export');
 
 });

@@ -34,6 +34,8 @@ use Workdo\Facilities\Entities\FacilitiesSpace;
 use Workdo\Facilities\Entities\FacilitiesService;
 use Workdo\ProductService\DataTables\ProductServiceDataTable;
 use Workdo\OpticalAndEyeCareCenter\Entities\OpticalEyeCareItems;
+use Workdo\ProductService\Exports\ProductServiceExport;
+use Maatwebsite\Excel\Facades\Excel;
 class ProductServiceController extends Controller
 {
     /**
@@ -264,7 +266,7 @@ class ProductServiceController extends Controller
         {
             $rules = [
                 'name' => 'required',
-                'sku' => 'required',
+                'sku' => 'required|unique:product_services,sku,NULL,id,workspace_id,'.getActiveWorkSpace(),
                 'sale_price' => 'required|numeric',
                 'purchase_price' => 'required|numeric',
                 'category_id' => 'required',
@@ -838,6 +840,45 @@ class ProductServiceController extends Controller
             $taxs_data = [];
             return json_encode($taxs_data);
         }
+    }
+
+    public function checkSku(Request $request)
+    {
+        $sku = $request->sku;
+        $productService = \Workdo\ProductService\Entities\ProductService::where('sku', $sku)
+            ->where('workspace_id', getActiveWorkSpace())
+            ->first();
+
+        if ($productService) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'SKU already exists'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'SKU is available'
+        ]);
+    }
+
+    public function export()
+    {
+        $productServices = ProductService::select([
+            'name',
+            'sku',
+            'sale_price',
+            'purchase_price',
+            'quantity',
+            'type',
+            'description'
+        ])
+        ->where('created_by', creatorId())
+        ->where('workspace_id', getActiveWorkSpace())
+        ->get();
+
+
+        return Excel::download(new ProductServiceExport($productServices), 'product-service.csv');
     }
 
 

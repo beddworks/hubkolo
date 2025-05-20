@@ -299,8 +299,7 @@
             const MAX_CAMERA_ATTEMPTS = 2;
 
             let addCartProductOnce = {
-                product_id: '',
-                warehouse_id: '',
+                sku: '',
                 status: false
             }
             
@@ -978,34 +977,33 @@
              * @param {object} data - The parsed barcode data
              */
             function displayBarcodeInfo(data) {
-                // console.log('Parsed barcode data:', data);
+                console.log('Parsed barcode data:', data);
 
-                let url = '{{ route("addTocart", [":product_id", ":session", ":warehouse_id"])}}';
+                let url = '{{ route("addTocart", [":product_id", ":session", ":warehouse_id", ":sku"])}}';
 
                 let sum = 0;
 
-                const product = data.info.id;
-                const [productId, warehouseId] = product.split('_');
+                const product = data.info.sku;
 
-                if(addCartProductOnce.product_id == productId && addCartProductOnce.warehouse_id == warehouseId){
+                if(addCartProductOnce.sku == product){
                     addCartProductOnce.status = true;
                 }else{
                     addCartProductOnce.status = false;
                 }
 
-                url = url.replace(':product_id', productId).replace(':session', 'pos').replace(':warehouse_id', warehouseId);
+                url = url.replace(':product_id', 'undefined').replace(':session', 'pos').replace(':warehouse_id', 'undefined').replace(':sku', product);
 
-                addCartProductOnce.product_id = productId;
-                addCartProductOnce.warehouse_id = warehouseId;
+                addCartProductOnce.sku = product;
 
                 
                 
-                if (addCartProductOnce.product_id == productId && addCartProductOnce.warehouse_id == warehouseId && addCartProductOnce.status == false) {
+                if (addCartProductOnce.sku == product && addCartProductOnce.status == false) {
 
                     $.ajax({
                         url: url,
 
                         success: function(data) {
+
 
                             if (data.code == '200') {
 
@@ -1037,10 +1035,12 @@
 
                                 show_toastr('{{ __('Success') }}', 'Product added to cart', 'success');
                             }
+
                         },
                         error: function(data) {
                             data = data.responseJSON;
-                            show_toastr('{{ __('Error') }}', data.error, 'error');
+                            console.log('ini error', data);
+                            show_toastr('{{ __('Error') }}', data.message, 'error');
                         }
                     });
 
