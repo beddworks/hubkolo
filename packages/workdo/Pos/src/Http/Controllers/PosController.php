@@ -1688,13 +1688,22 @@ class PosController extends Controller
             }else{
                 $productServices = [];
             }
-            $quantity = $request->quantity;
+
+            // Handle quantity based on type
+            if ($request->quantity_type === 'auto') {
+                // Each product will use its own stock quantity
+                $quantity = 1; // We'll handle individual quantities in the view
+            } else {
+                // Use manual quantity for all products
+                $quantity = $request->quantity;
+            }
+
             $barcode = [
                 'barcodeType' => Pos::barcodeType() == '' ? 'code128' : Pos::barcodeType(),
                 'barcodeFormat' => Pos::barcodeFormat() == '' ? 'css' : Pos::barcodeFormat(),
             ];
 
-            return view('pos::barcode.receipt', compact('productServices', 'quantity', 'barcode'));
+            return view('pos::barcode.receipt', compact('productServices', 'quantity', 'barcode', 'request'));
         } else {
             return redirect()->back()->with('error', __('Product is required.'));
         }

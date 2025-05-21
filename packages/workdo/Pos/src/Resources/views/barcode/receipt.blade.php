@@ -29,29 +29,55 @@
     @if (isset($company_settings['site_rtl'] ) && $company_settings['site_rtl'] == 'on')
         <link rel="stylesheet" href="{{ asset('assets/css/style-rtl.css')}}" id="main-style-link">
     @endif
+    <style>
+        .sticky-print-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 15px 30px;
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .sticky-print-button:hover {
+            background-color: #0b5ed7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        @media print {
+            .sticky-print-button {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
 <div id="bot" class="mt-5">
     <div class="row">
         @foreach($productServices as $product)
-            @for($i=1;$i<=$quantity;$i++)
+            @php
+                // Calculate quantity based on type
+                $printQuantity = $request->quantity_type === 'auto' ? $product->quantity : $quantity;
+            @endphp
+            @for($i=1;$i<=$printQuantity;$i++)
                 <div class="col-auto mb-2">
-                    <small class="">{{$product->name}}</small>
+                    <small class="">{{$product->name}} @if($request->quantity_type === 'auto')({{$i}} of {{$printQuantity}})@endif</small>
                     <div data-id="{{$product->id}}" class="product_barcode product_barcode_hight_de product_barcode_{{$product->id}} mt-2" data-warehouse="{{ $product->warehouse_id }}" data-skucode="{{ $product->sku }}"></div>
                 </div>
             @endfor
         @endforeach
     </div>
 </div>
-<script>
-    // window.print();
-    // window.onafterprint = back;
 
-    // function back() {
-    //     window.close();
-    //     window.history.back();
-    // }
-</script>
+<button class="sticky-print-button" onclick="printAndBack()">
+    <i class="ti ti-printer"></i> {{__('Print')}}
+</button>
+
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="{{ asset('packages/workdo/Pos/src/Resources/assets/js/jquery-barcode.min.js') }}"></script>
 <script src="{{ asset('packages/workdo/Pos/src/Resources/assets/js/jquery-barcode.js') }}"></script>
@@ -65,6 +91,7 @@
             generateBarcode(sku, id);
         });
     });
+    
     function generateBarcode(val, id) {
         var value = val;    
         var btype = '{{ $barcode['barcodeType'] }}';
@@ -81,7 +108,14 @@
             addQuietZone: '1'
         };
         $('.product_barcode_' + id).html("").show().barcode(value, btype, settings);
+    }
 
+    function printAndBack() {
+        window.print();
+        window.onafterprint = function() {
+            window.close();
+            window.history.back();
+        };
     }
 </script>
 </body>

@@ -556,11 +556,12 @@
                             $('#btn-pur button').removeAttr('disabled');
                             $('#btn-pur .btn-empty a').removeAttr('style');
                             $('.btn-empty button').addClass('btn-clear-cart');
+                            show_toastr('Success', 'Product added to cart successfully', 'success');
                         }
                     },
                     error: function(data) {
                         data = data.responseJSON;
-                        show_toastr('{{ __('Error') }}', data.error, 'error');
+                        show_toastr('{{ __('Error') }}', data.message, 'error');
                     }
                 });
             });

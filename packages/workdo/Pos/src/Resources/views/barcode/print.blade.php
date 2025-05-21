@@ -8,64 +8,68 @@
 @endsection
 @push('css')
     <link rel="stylesheet" href="{{ asset('packages/workdo/Pos/src/Resources/assets/css/buttons.dataTables.min.css') }}">
+    <style>
+        #manual_quantity_div {
+            display: none;
+        }
+    </style>
 @endpush
 
 @push('scripts')
     <script type="text/javascript" src="{{ asset('js/html2pdf.bundle.min.js') }}"></script>
     <script>
-
         $(document).ready(function () {
             var b_id = $('#warehouse_id').val();
             getProduct(b_id);
-        });
-        $(document).on('change', 'select[name=warehouse_id]', function () {
+            
+            // Handle quantity type change
+            $('#quantity_type').on('change', function() {
+                if($(this).val() === 'manual') {
+                    $('#manual_quantity_div').slideDown();
+                    $('#quantity').prop('required', true);
+                } else {
+                    $('#manual_quantity_div').slideUp();
+                    $('#quantity').prop('required', false);
+                }
+            });
 
+            // Trigger change event on page load to set initial state
+            $('#quantity_type').trigger('change');
+        });
+        
+        $(document).on('change', 'select[name=warehouse_id]', function () {
             var warehouse_id = $(this).val();
             getProduct(warehouse_id);
         });
 
         function getProduct(bid) {
-
             $.ajax({
                 url: '{{route('pos.getproduct')}}',
                 type: 'POST',
                 data: {
                     "warehouse_id": bid, "_token": "{{ csrf_token() }}",
                 },
-
                 success: function (data) {
-                    // console.log(data);
                     $('#product_id').empty();
-
                     $("#product_div").html('');
                     $('#product_div').append('<label for="product_id" class="form-label">{{__('Product')}}</label><span class="text-danger">*</span>');
                     $('#product_div').append('<select class="form-label" id="product_id" name="product_id[]"  multiple></select>');
                     $('#product_id').append('<option value="">{{__('Select Product')}}</option>');
 
                     $.each(data, function (key, value) {
-                        // console.log(key, value);
                         $('#product_id').append('<option value="' + key + '">' + value + '</option>');
                     });
                     var multipleCancelButton = new Choices('#product_id', {
                         removeItemButton: true,
                     });
-
                 }
-
             });
         }
-
-
     </script>
     <script>
         function copyToClipboard(element) {
             var copyText = element.id;
             navigator.clipboard.writeText(copyText);
-            // document.addEventListener('copy', function (e) {
-            //     e.clipboardData.setData('text/plain', copyText);
-            //     e.preventDefault();
-            // }, true);
-            // document.execCommand('copy');
             show_toastr('success', 'Url copied to clipboard', 'success');
         }
     </script>
@@ -82,11 +86,9 @@
                 jsPDF: {unit: 'in', format: 'A2'}
             };
             html2pdf().set(opt).from(element).save();
-
         }
     </script>
 @endpush
-
 
 @section('page-action')
     <div class="float-end">
@@ -95,7 +97,6 @@
         </a>
     </div>
 @endsection
-
 
 @section('content')
     <div class="row mt-3">
@@ -119,8 +120,14 @@
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    {{ Form::label('quantity', __('Quantity'),['class'=>'form-label']) }}<x-required></x-required>
-                                    {{ Form::number('quantity',null, array('class' => 'form-control','required'=>'required')) }}
+                                    {{ Form::label('quantity_type', __('Quantity Type'),['class'=>'form-label']) }}<x-required></x-required>
+                                    {{ Form::select('quantity_type', ['auto' => __('Auto (Product Stock Quantity)'), 'manual' => __('Manual Quantity') ], 'auto', ['class' => 'form-control select', 'id' => 'quantity_type', 'required' => 'required']) }}
+                                </div>
+                            </div>
+                            <div class="col-lg-4" id="manual_quantity_div">
+                                <div class="form-group">
+                                    {{ Form::label('quantity', __('Manual Quantity'),['class'=>'form-label']) }}<x-required></x-required>
+                                    {{ Form::number('quantity', 1, array('class' => 'form-control', 'id' => 'quantity', 'min' => '1')) }}
                                 </div>
                             </div>
                         </div>
