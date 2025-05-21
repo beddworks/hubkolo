@@ -27,6 +27,9 @@ use Workdo\Pos\DataTables\BarcodeDataTable;
 use Workdo\Quotation\Entities\Quotation;
 use Workdo\Quotation\Entities\QuotationProduct;
 use Workdo\Account\Entities\Customer;
+use Milon\Barcode\DNS1D;
+use TCPDF;
+
 class PosController extends Controller
 {
     /**
@@ -44,7 +47,7 @@ class PosController extends Controller
     {
         if (\Auth::user()->isAbleTo('pos add manage'))
         {
-            // session()->forget('pos');
+            session()->forget('pos');
             $customers=[];
             $customers      = User::where('type','client')->where('created_by', creatorId())->where('workspace_id',getActiveWorkSpace())->get()->pluck('name', 'name');
             $customers->prepend('Walk-in-customer', 'Walk-in-customer');
@@ -141,7 +144,10 @@ class PosController extends Controller
                 $customer      = User::where('name', '=', $request->vc_name)->where('type','client')->where('created_by', creatorId())->where('workspace_id',getActiveWorkSpace())->first();
             }
 	    $user = \Auth::user();
-            $warehouse = warehouse::where('id', '=', $request->warehouse_name)->where('created_by', creatorId())->where('created_by', creatorId())->where('workspace',getActiveWorkSpace())->first();
+
+            if($request->warehouse_name == null || $request->warehouse_name == ''){
+                $warehouse = warehouse::where('id', '=', $request->warehouse_name)->where('created_by', creatorId())->where('workspace',getActiveWorkSpace())->first();
+            }
 
             $details = [
                 'pos_id' => Pos::posNumberFormat($this->invoicePosNumber()),
@@ -154,7 +160,11 @@ class PosController extends Controller
             if (!empty($details['customer']['billing_state']))
             {
 
-                $warehousedetails = '<h7 class="text-dark">' . ucfirst($details['warehouse']['name'])  . '</p></h7>';
+                if(!empty($details['warehouse'])){
+                    $warehousedetails = '<h7 class="text-dark">' . ucfirst($details['warehouse']['name'])  . '</p></h7>';
+                }else{
+                    $warehousedetails = '-';
+                }
                 $details['customer']['billing_state'] = $details['customer']['billing_state'] != '' ? ", " . $details['customer']['billing_state'] : '';
                 $details['customer']['shipping_state'] = $details['customer']['shipping_state'] != '' ? ", " . $details['customer']['shipping_state'] : '';
 
@@ -173,7 +183,13 @@ class PosController extends Controller
 
                     $customerdetails = '<h2 class="h6"><b>' . __('Walk-in Customer') . '</b><h2>';
                 }
-                $warehousedetails = '<h7 class="text-dark">' . ucfirst($details['warehouse']['name'])  . '</p></h7>';
+
+                if(!empty($details['warehouse'])){
+                    $warehousedetails = '<h7 class="text-dark">' . ucfirst($details['warehouse']['name'])  . '</p></h7>';
+                }else{
+                    $warehousedetails = '-';
+                }
+
                 $shippdetails = '-';
 
             }
@@ -243,7 +259,12 @@ class PosController extends Controller
             }
             $user_id = creatorId();
             $customer_id      = Pos::customer_id($request->vc_name);
-            $warehouse_id      = warehouse::warehouse_id($request->warehouse_name);
+            if($request->warehouse_name != null && $request->warehouse_name != ''){
+                $warehouse_id      = warehouse::warehouse_id($request->warehouse_name);
+            }
+            else{
+                $warehouse_id = 0;
+            }
             $pos_id       = $this->invoicePosNumber();
             $sales            = session()->get('pos');
             if (isset($sales) && !empty($sales) && count($sales) > 0) {
@@ -259,7 +280,7 @@ class PosController extends Controller
                     $pos = new Pos();
                     $pos->pos_id           = $pos_id;
                     $pos->customer_id      = $customer_id;
-                    $pos->warehouse_id     = $request->warehouse_name;
+                    $pos->warehouse_id     = $warehouse_id;
                     $pos->workspace        = getActiveWorkSpace();
                     $pos->pos_date         = date('Y-m-d');
                     $pos->created_by       = $user_id;
@@ -287,7 +308,9 @@ class PosController extends Controller
                             $positems->discount        = $discount;
                             $positems->workspace =getActiveWorkSpace();
                             $positems->save();
-                            Pos::warehouse_quantity('minus',$positems->quantity,$positems->product_id,$request->warehouse_name);
+                            if($warehouse_id != null){
+                                Pos::warehouse_quantity('minus',$positems->quantity,$positems->product_id,$warehouse_id);
+                            }
                         if(module_is_active('Account'))
                         {
                             $type='Pos';
@@ -410,22 +433,23 @@ class PosController extends Controller
             //     }
             // }
             $output = "";
-            if($request->war_id == '0')
+            if($request->war_id == '0' || $request->war_id == null)
             {
                 $ids = WarehouseProduct::where('warehouse_id',1)->get()->pluck('product_id')->toArray();
+                
                 if ($request->cat_id !== '' && $request->search == '')
                 {
-                    if($request->cat_id == '0')
+                    if($request->cat_id == '0' || $request->cat_id == null || $request->cat_id == '')
                     {
-                        $products = Pos::getallproducts()->whereIn('product_services.id',$ids)->get();
+                        $products = Pos::getallproducts()->get();
 
                     }else{
-                        $products = Pos::getallproducts()->where('category_id', $request->cat_id)->whereIn('product_services.id',$ids)->get();
+                        $products = Pos::getallproducts()->where('category_id', $request->cat_id)->get();
                     }
                 } else {
                     if($request->cat_id == '0'){
                         // $products = Pos::getallproducts()->where('product_services.name', 'LIKE', "%{$request->search}%")->get();
-                        $products = Pos::getallproducts()->where('product_services.name', 'LIKE', "%{$request->search}%")->whereIn('product_services.id',$ids)->get();
+                        $products = Pos::getallproducts()->where('product_services.name', 'LIKE', "%{$request->search}%")->get();
                     }else{
                         $products = Pos::getallproducts()->where('product_services.name', 'LIKE', "%{$request->search}%")->orWhere('category_id', $request->cat_id)->get();
                         // $products = Pos::getallproducts()->where('product_services.name', 'LIKE', "%{$request->search}%")->whereIn('product_services.id',$ids)->where('category_id', $request->cat_id)->get();
@@ -454,7 +478,7 @@ class PosController extends Controller
             {
                 foreach ($products as $key => $product)
                 {
-                    $quantity=$product->warehouseProduct($product->id,$request->war_id!=0?$request->war_id:1);
+                    $quantity=$product->quantity;
                     $unit=(!empty($product) && !empty($product->unit()))?$product->unit()->name:'';
 
                     if(check_file($product->image)){
@@ -478,19 +502,39 @@ class PosController extends Controller
 
                     $output .= '
 
-                            <div class="col-xl-3 col-lg-4 col-sm-6">
+                            <div class="col-lg-3 col-md-3 col-12">
+                            
                                 <div class="tab-pane fade show active toacart w-100" data-url="' . url('add-to-cart/' . $product->id . '/' . $lastsegment .'/'. $request->war_id) .'">
-                                    <div class="position-relative card">
-                                        <div class="card-image">
-                                            <img alt="Image placeholder" src="' . get_file($image_url) . '" class="avatar shadow hover-shadow-lg">
-                                            <p class="top-badge badge p-2 badge-danger mb-0">'. $quantity.' '.$unit .'</p>
+                                    <div class="position-relative card product-list-card-item mb-3" style="border-radius: 16px; overflow: hidden;">
+                                        <div class="d-block d-md-none">
+                                            <div class="d-flex align-items-center p-2">
+                                                <div class="card-image pt-0 flex-shrink-0" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; background: #f6f8fc; border-radius: 12px;">
+                                                    <img alt="Image placeholder" src="' . get_file($image_url) . '" class="img-fluid" style="max-width: 48px; max-height: 48px;">
+                                                </div>
+                                                <div class="flex-grow-1 ms-3 w-100">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <p class="mb-1 text-dark product-title-name" style="font-size: 0.80rem; font-weight: 400;">' . $product->name . '</p>   
+                                                    </div>
+                                                    <div class="d-flex justify-content-between align-items-center mt-1">
+                                                        <span class="badge badge-danger" style="font-size: 0.75rem;">' . $quantity . ' ' . $unit . '</span>
+                                                        <div class="text-end">
+                                                            <span class="badge bg-primary mb-0" style="font-size: 0.75rem;">' . currency_format_with_sym($productprice) . '</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="p-0 custom-card-body card-body d-flex ">
-                                            <div class="card-body p-3 text-left card-bottom-content">
-                                                <h6 class="mb-2 text-dark product-title-name">' . $product->name . '</h6>
-                                                <p class="badge bg-primary p-2 mb-0">' . currency_format_with_sym($productprice) . '</p>
-
-                                                                                          </div>
+                                        <div class="d-none d-md-block">
+                                            <div class="card-image">
+                                                <img alt="Image placeholder" src="' . get_file($image_url) . '" class="avatar shadow hover-shadow-lg">
+                                                <p class="top-badge badge p-2 badge-danger mb-0">'. ($product->type != 'service' ? $quantity.' '.$unit : $unit) .'</p>
+                                            </div>
+                                            <div class="p-0 custom-card-body card-body d-flex ">
+                                                <div class="card-body p-3 text-left card-bottom-content">
+                                                    <h6 class="mb-2 text-dark product-title-name">' . $product->name . '</h6>
+                                                    <p class="badge bg-primary p-2 mb-0">' . currency_format_with_sym($productprice) . '</p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -523,7 +567,7 @@ class PosController extends Controller
         }
     }
 
-    public function addToCart(Request $request, $id,$session_key,$war, $sku = null)
+    public function addToCart(Request $request, $id,$session_key,$war = null, $sku = null)
     {
         if (Auth::user()->isAbleTo('pos cart manage') && $request->ajax()) {
 
@@ -534,30 +578,41 @@ class PosController extends Controller
             }
 
 
+
             $productquantity = 0;
 
-            if ($product) {
+            if ($product && $product->type != 'service') {
 
 
                 // $productquantity = $product->getTotalProductQuantity();
 
                 // $war = $war != 0 ? $war : 1;
 
-                $war = $product->warehouse_id;
+                if($war == null || $war == ''){
+                    $productquantity = $product->quantity;
+                }else{
+                    $productquantity = $product->warehouseProduct($product->id, $war);
+                }
 
-                $productquantity=$product->warehouseProduct($product->id, $war);
+
+
+                
+
+                if (!$product || ($session_key == 'pos' && $productquantity == 0)) {
+                    return response()->json(
+                        [
+                            'code' => 400,
+                            'status' => 'error',
+                            'message' => __('This product is out of stock!'),
+                        ],
+                        400
+                    );
+                }
+
+            }else{
+                $productquantity = 1;
             }
 
-            if (!$product || ($session_key == 'pos' && $productquantity == 0)) {
-                return response()->json(
-                    [
-                        'code' => 400,
-                        'status' => 'error',
-                        'message' => __('This product is out of stock!'),
-                    ],
-                    400
-                );
-            }
 
             $productname = $product->name;
 
@@ -571,6 +626,7 @@ class PosController extends Controller
 
                 $productprice = $product->sale_price != 0 ? $product->sale_price : $product->purchase_price;
             }
+            
 
             $originalquantity = (int)$productquantity;
             $taxes=\Workdo\Pos\Entities\Pos::tax($product->tax_id);
@@ -622,7 +678,7 @@ class PosController extends Controller
                                                 </g>
                                             </svg>
                                         </button>
-                                         <input type="number" step="1" min="1" max="'.$productquantity.'" name="quantity" title="' . __('Quantity') . '" class="input-number" size="4" data-url="' . url('update-cart/') . '" data-id="' . $id . '">
+                                         <input type="number" step="1" min="1" max="'.($product->type == 'service' ? '999999' : $productquantity).'" name="quantity" title="' . __('Quantity') . '" class="input-number" size="4" data-url="' . url('update-cart/') . '" data-id="' . $id . '">
                                         <button class="plus">
                                             <svg width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
                                                 <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
@@ -674,15 +730,18 @@ class PosController extends Controller
                         "product_tax_id"=>!empty($product_tax_id)?implode(',',$product_tax_id):0,
                     ],
                 ];
-                if ($originalquantity < $cart[$id]['quantity'] && $session_key == 'pos') {
-                    return response()->json(
-                        [
-                            'code' => 400,
-                            'status' => 'error',
-                            'message' => __('This product is out of stock!'),
-                        ],
-                        400
-                    );
+
+                if($product->type != 'service'){
+                    if ($originalquantity < $cart[$id]['quantity'] && $session_key == 'pos') {
+                            return response()->json(
+                                [
+                                'code' => 400,
+                                'status' => 'error',
+                                'message' => __('This product is out of stock!'),
+                            ],
+                            400
+                        );
+                    }
                 }
 
                 session()->put($session_key, $cart);
@@ -710,15 +769,17 @@ class PosController extends Controller
                 $cart[$id]["subtotal"]         = $subtotal + $tax;
                 $cart[$id]["originalquantity"] = $originalquantity;
 
+                if($product->type != 'service'){
                 if ($originalquantity < $cart[$id]['quantity'] && $session_key == 'pos') {
-                    return response()->json(
-                        [
-                            'code' => 404,
-                            'status' => 'Error',
-                            'error' => __('This product is out of stock!'),
-                        ],
-                        404
-                    );
+                        return response()->json(
+                            [
+                                'code' => 404,
+                                'status' => 'Error',
+                                'error' => __('This product is out of stock!'),
+                            ],
+                            404
+                        );
+                    }
                 }
 
                 session()->put($session_key, $cart);
@@ -833,15 +894,20 @@ class PosController extends Controller
                 $cart[$id]["subtotal"] = $subtotal + $tax;
             }
 
-            if (isset($cart[$id]["originalquantity"]) && $cart[$id]["originalquantity"] < $cart[$id]['quantity'] && $session_key == 'pos') {
-                return response()->json(
-                    [
-                        'code' => 404,
-                        'status' => 'Error',
-                        'error' => __('This product is out of stock!'),
-                    ],
-                    404
-                );
+            $product = \Workdo\ProductService\Entities\ProductService::find($id);
+
+            if($product->type != 'service'){
+
+                if (isset($cart[$id]["originalquantity"]) && $cart[$id]["originalquantity"] < $cart[$id]['quantity'] && $session_key == 'pos') {
+                    return response()->json(
+                        [
+                            'code' => 404,
+                            'status' => 'Error',
+                            'error' => __('This product is out of stock!'),
+                        ],
+                        404
+                    );
+                }
             }
 
             $subtotal = array_sum(array_column($cart, 'subtotal'));
@@ -1463,7 +1529,11 @@ class PosController extends Controller
 
         if (!empty($details['customer']['billing_state']))
         {
-            $warehousedetails = '<h7 class="text-dark">' . ucfirst($details['warehouse']['name'])  . '</p></h7>';
+            if(!empty($details['warehouse'])){
+                $warehousedetails = '<h7 class="text-dark">' . ucfirst($details['warehouse']['name'])  . '</p></h7>';
+            }else{
+                $warehousedetails = '-';
+            }
             $details['customer']['billing_state'] = $details['customer']['billing_state'] != '' ? ", " . $details['customer']['billing_state'] : '';
             $details['customer']['shipping_state'] = $details['customer']['shipping_state'] != '' ? ", " . $details['customer']['shipping_state'] : '';
             $customerdetails = '<h6 class="text-dark">' . ucfirst($details['customer']['name']) . '<p class="m-0 h6 font-weight-normal">' . $details['customer']['billing_phone'] . '</p>' . '<p class="m-0 h6 font-weight-normal">' . $details['customer']['billing_address'] . '</p>' . '<p class="m-0 h6 font-weight-normal">' . $details['customer']['billing_city'] . $details['customer']['billing_state'] . '</p>' . '<p class="m-0 h6 font-weight-normal">' . $details['customer']['billing_country'] . '</p>' . '<p class="m-0 h6 font-weight-normal">' . $details['customer']['billing_zip'] . '</p></h6>';
@@ -1472,7 +1542,11 @@ class PosController extends Controller
         }
         else {
             $customerdetails = '<h2 class="h6"><b>' . __('Walk-in Customer') . '</b><h2>';
-            $warehousedetails = '<h7 class="text-dark">' . ucfirst($details['warehouse']['name'])  . '</p></h7>';
+            if(!empty($details['warehouse'])){
+                $warehousedetails = '<h7 class="text-dark">' . ucfirst($details['warehouse']['name'])  . '</p></h7>';
+            }else{
+                $warehousedetails = '-';
+            }
             $shippdetails = '-';
 
         }
@@ -1591,8 +1665,8 @@ class PosController extends Controller
 
     public function getproduct(Request $request)
     {
-        if ($request->warehouse_id == 0) {
-            $productServices = WarehouseProduct::where('product_id', '=', $request->warehouse_id)->where('created_by', '=', creatorId())->where('workspace',getActiveWorkSpace())->get()->pluck('name', 'id')->toArray();
+        if ($request->warehouse_id == 0 || $request->warehouse_id == null || $request->warehouse_id == '') {
+            $productServices = \Workdo\ProductService\Entities\ProductService::where('created_by', '=', creatorId())->where('workspace_id',getActiveWorkSpace())->get()->pluck('name', 'id')->toArray();
         } else {
             $productServicesId = WarehouseProduct::where('created_by', '=', creatorId())->where('warehouse_id', $request->warehouse_id)->where('workspace',getActiveWorkSpace())->get()->pluck('product_id')->toArray();
             if(module_is_active('ProductService'))
@@ -1619,10 +1693,11 @@ class PosController extends Controller
                 'barcodeType' => Pos::barcodeType() == '' ? 'code128' : Pos::barcodeType(),
                 'barcodeFormat' => Pos::barcodeFormat() == '' ? 'css' : Pos::barcodeFormat(),
             ];
+
+            return view('pos::barcode.receipt', compact('productServices', 'quantity', 'barcode'));
         } else {
             return redirect()->back()->with('error', __('Product is required.'));
         }
-        return view('pos::barcode.receipt', compact('productServices', 'barcode', 'quantity'));
     }
 
 }

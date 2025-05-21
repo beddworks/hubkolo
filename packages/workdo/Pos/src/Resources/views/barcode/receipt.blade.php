@@ -44,13 +44,13 @@
     </div>
 </div>
 <script>
-    window.print();
-    window.onafterprint = back;
+    // window.print();
+    // window.onafterprint = back;
 
-    function back() {
-        window.close();
-        window.history.back();
-    }
+    // function back() {
+    //     window.close();
+    //     window.history.back();
+    // }
 </script>
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="{{ asset('packages/workdo/Pos/src/Resources/assets/js/jquery-barcode.min.js') }}"></script>

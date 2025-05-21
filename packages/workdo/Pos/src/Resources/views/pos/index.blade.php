@@ -114,7 +114,7 @@
         </div>
 
         <div class="mt-2 row row-gap">
-            <div class="col-xl-8">
+            <div class="col-xl-7">
                 <div class="sop-card card">
                     <div class="card-body p-2">
                         <div class="right-content">
@@ -154,7 +154,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-4 ps-xl-0">
+            <div class="col-xl-5 ps-xl-0">
                 <div class="card m-0">
                     <div class="card-header p-2">
                         <div class="row row-gap">
@@ -163,7 +163,7 @@
                                 {{ Form::hidden('vc_name_hidden', '',['id' => 'vc_name_hidden']) }}
                             </div>
                             <div class="col-md-6">
-                                {{ Form::select('warehouse_id', $warehouses,$warehouseId, array('class' => 'form-control select warehouse_select ','id'=>'warehouse','required'=>'required')) }}
+                                {{ Form::select('warehouse_id', ['' => __('Select Warehouse')] + $warehouses->toArray(), $warehouseId, array('class' => 'form-control select warehouse_select ','id'=>'warehouse','required'=>'required')) }}
                                 {{ Form::hidden('warehouse_name_hidden', '',['id' => 'warehouse_name_hidden']) }}
                                 {{ Form::hidden('quotation_id', $id,['id' => 'quotation_id' , 'class'=>"quotation"]) }}
                             </div>
@@ -190,6 +190,8 @@
                                     <tbody id="tbody">
                                         @php
                                                 $ids = \App\Models\WarehouseProduct::All()->pluck('product_id')->toArray();
+                                                $idsService = \Workdo\ProductService\Entities\ProductService::where('type','product')->pluck('id')->toArray();
+                                                $ids = array_merge($ids,$idsService);
                                         @endphp
                                         @if (session($lastsegment) && !empty(session($lastsegment)) && count(session($lastsegment)) > 0)
                                             @foreach (session($lastsegment) as $id => $details)

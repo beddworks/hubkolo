@@ -107,7 +107,7 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     {{Form::label('warehouse_id',__('Warehouse'),['class'=>'form-label'])}}<x-required></x-required>
-                                    {{ Form::select('warehouse_id', $warehouses,'', array('class' => 'form-control select','id'=>'warehouse_id','required'=>'required')) }}
+                                    {{ Form::select('warehouse_id', ['' => 'Select Warehouse'] + $warehouses->toArray(),null, array('class' => 'form-control select','id'=>'warehouse_id')) }}
                                 </div>
                             </div>
                             <div class="col-lg-4">

@@ -35,10 +35,10 @@ class Warehouse extends Model
         ];
         $default_warehouses = [
             0=>[
-                'name' => 'North Warehouse',
-                'address' => '723 N. Tillamook Street Portland, OR Portland, United States',
-                'city' => 'Portland',
-                'city_zip' => 97227,
+                'name' => 'Default Warehouse',
+                'address' => 'Default Warehouse',
+                'city' => 'Default Warehouse',
+                'city_zip' => 'Default Warehouse',
                 'created_by' => 2,
             ],
         ];

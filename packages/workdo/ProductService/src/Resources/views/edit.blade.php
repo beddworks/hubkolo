@@ -93,6 +93,11 @@
             var item_type = $('#item_type').val();
             var action = "edit";
             var item_id = "{{ $productService->id }}";
+
+            if(item_type != 'service'){
+                item_type = 'product';
+            }
+
             $.ajax({
                 url: '{{ route('product.section.type') }}',
                 type: 'POST',
